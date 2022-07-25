@@ -35,8 +35,6 @@ func NewResultData(data any) (*ResultData, error) {
 
 // Result 结果
 type Result struct {
-	Error     bool
-	Code      ErrCode
 	Msg       string
 	Data      *ResultData
 	StreamEnd bool
@@ -86,34 +84,25 @@ func (r *Result) WriteTo(w WriteStreamInterface) error {
 
 func ErrResult(code ErrCode, msg string) *Result {
 	return &Result{
-		Error: true,
-		Code:  code,
-		Msg:   msg,
+		Msg: msg,
 	}
 }
 
 func ErrResultWithData(code ErrCode, msg string, data any) *Result {
 	rData, _ := NewResultData(data)
 	return &Result{
-		Error: true,
-		Code:  code,
-		Msg:   msg,
-		Data:  rData,
+		Msg:  msg,
+		Data: rData,
 	}
 }
 
 func SuccessResult(data any) *Result {
 	rd, _ := NewResultData(data)
 	return &Result{
-		Error: false,
-		Code:  "0",
-		Data:  rd,
+		Data: rd,
 	}
 }
 
 func SuccessResultEmpty() *Result {
-	return &Result{
-		Error: false,
-		Code:  "0",
-	}
+	return &Result{}
 }

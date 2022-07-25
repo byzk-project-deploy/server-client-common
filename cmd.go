@@ -6,11 +6,11 @@ import (
 	"fmt"
 )
 
-type CmdHandler func(result *Result, conn RWStreamInterface) *Result
+type CmdHandler func(stream *Stream) *Result
 
 var cmdMap = map[string]CmdHandler{}
 
-func CmdRoute(cmdName string, data []byte, rw RWStreamInterface) {
+func CmdRoute(cmdName string, stream *Stream) {
 	defer func() {
 		e := recover()
 		if e != nil {
@@ -122,6 +122,10 @@ func (c CmdName) ExchangeWithOption(rw RWStreamInterface, option *ExchangeOption
 			}
 		}
 
+		if r.Error {
+			return r, fmt.Errorf("%s", r.Msg)
+		}
+
 		return r, nil
 	}
 }
@@ -151,4 +155,6 @@ var (
 	CmdSystemShellCurrent CmdName = "/system/shell/current"
 	// CmdSystemShellCurrentSetting 设置当前使用中的shell
 	CmdSystemShellCurrentSetting CmdName = "/system/shell/current/setting"
+	// CmdSystemDirPath 系统内目录路径验证
+	CmdSystemDirPath CmdName = "/system/dir/path/verify"
 )
