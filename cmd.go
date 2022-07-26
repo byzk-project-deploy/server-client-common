@@ -165,7 +165,7 @@ func (c CmdName) ExchangeWithOption(stream *transportstream.Stream, option *Exch
 		}
 
 		if err != nil {
-			return msg, nil
+			return msg, err
 		}
 
 		nextData, err := option.StreamHandle(msg)
