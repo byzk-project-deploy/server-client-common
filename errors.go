@@ -15,6 +15,8 @@ const (
 	ErrServerInside
 	// ErrSystemCall 系统调用异常
 	ErrSystemCall
+	// ErrSystemPath 系统路径相关错误
+	ErrSystemPath
 )
 
 //type ErrCode string
