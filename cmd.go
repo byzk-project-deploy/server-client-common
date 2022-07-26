@@ -1,12 +1,37 @@
 package serverclientcommon
 
 import (
+	"encoding/json"
 	"fmt"
 	transportstream "github.com/go-base-lib/transport-stream"
+	"github.com/gogo/protobuf/proto"
 	"net"
 )
 
 type ExchangeData []byte
+
+func (e ExchangeData) UnmarshalJson(i any) error {
+	if e == nil {
+		return nil
+	}
+
+	if err := json.Unmarshal(e, i); err != nil {
+		return fmt.Errorf("数据尝试从JSON反序列化到结构体失败: %s", err.Error())
+	}
+
+	return nil
+}
+
+func (e ExchangeData) UnmarshalProto(msg proto.Message) error {
+	if e == nil {
+		return nil
+	}
+
+	if err := proto.Unmarshal(e, msg); err != nil {
+		return fmt.Errorf("数据尝试从proto反序列化到结构体失败: %s", err.Error())
+	}
+	return nil
+}
 
 type CmdHandler func(stream *transportstream.Stream, conn net.Conn) (ExchangeData, error)
 
