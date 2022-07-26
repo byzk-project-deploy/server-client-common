@@ -9,6 +9,12 @@ const (
 	ErrCodeReadCommand
 	// ErrCodeCommandUndefined 命令未定义
 	ErrCodeCommandUndefined
+	// ErrCodeValidation 数据校验异常
+	ErrCodeValidation
+	// ErrServerInside 服务器内部异常
+	ErrServerInside
+	// ErrSystemCall 系统调用异常
+	ErrSystemCall
 )
 
 //type ErrCode string
