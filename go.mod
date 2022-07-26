@@ -3,7 +3,7 @@ module github.com/byzk-project-deploy/server-client-common
 go 1.18
 
 require (
-	github.com/go-base-lib/transport-stream v0.0.0-20220726084333-6674a28a3cc6
+	github.com/go-base-lib/transport-stream v0.0.0-20220726090446-571c4f243d92
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d
 )
 
