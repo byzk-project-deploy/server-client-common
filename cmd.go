@@ -1,16 +1,25 @@
 package serverclientcommon
 
 import (
-	"bufio"
-	"bytes"
 	"fmt"
+	transportstream "github.com/go-base-lib/transport-stream"
+	"net"
 )
 
-type CmdHandler func(stream *Stream) *Result
+type ExchangeData []byte
 
-var cmdMap = map[string]CmdHandler{}
+type CmdHandler func(stream *transportstream.Stream, conn net.Conn) (ExchangeData, error)
 
-func CmdRoute(cmdName string, stream *Stream) {
+var cmdMap = map[CmdName]CmdHandler{}
+
+func CmdRoute(stream *transportstream.Stream, conn net.Conn) {
+	sendEndOk := false
+	defer func() {
+		if sendEndOk {
+			return
+		}
+		_ = stream.WriteEndMsg()
+	}()
 	defer func() {
 		e := recover()
 		if e != nil {
@@ -21,26 +30,48 @@ func CmdRoute(cmdName string, stream *Stream) {
 			case error:
 				errMsg = r.Error()
 			}
-			ErrResult(ErrServerInside, "未知的指令处理异常: "+errMsg).WriteToEnd(rw)
+			_ = stream.WriteError(ErrCodeUnknown.Newf("未知的指令处理异常: %s", errMsg))
 		}
 	}()
-	dataR := &Result{}
-	if err := dataR.Parse(data); err != nil {
-		ErrResult(ErrDataParse, "数据包解析失败: "+err.Error()).WriteToEnd(rw)
+
+	cmdBytes, err := stream.ReceiveMsg()
+	if err != nil {
+		_ = stream.WriteError(ErrCodeReadCommand.New("读取命令码失败: " + err.Error()))
 		return
 	}
 
+	cmdName := CmdName(cmdBytes)
 	cmdHandle, ok := cmdMap[cmdName]
 	if !ok {
-		ErrResult(ErrCodeNotFount, "未识别的指令").WriteToEnd(rw)
+		_ = stream.WriteError(ErrCodeCommandUndefined.Newf("命令[%s]未被识别", cmdName))
 		return
 	}
-	r := cmdHandle(dataR, rw)
-	if r == nil {
-		SuccessResultEmpty().WriteToEnd(rw)
+
+	if err = stream.WriteMsg(nil, transportstream.MsgFlagSuccess); err != nil {
 		return
 	}
-	r.WriteToEnd(rw)
+
+	if nextData, err := cmdHandle(stream, conn); err != nil {
+		switch e := err.(type) {
+		case *transportstream.ErrInfo:
+			_ = stream.WriteError(e)
+		default:
+			_ = stream.WriteError(ErrCodeUnknown.New(err.Error()))
+		}
+	} else {
+		if err = stream.WriteEndMsgWithData(nextData); err != nil {
+			return
+		}
+		sendEndOk = true
+
+		for {
+			if _, err = stream.ReceiveMsg(); err == transportstream.StreamIsEnd {
+				return
+			}
+		}
+
+	}
+
 }
 
 type RWStreamInterface interface {
@@ -56,92 +87,93 @@ type WriteStreamInterface interface {
 
 type ExchangeOption struct {
 	// StreamHandle 流拦截器, 返回bool来确定是否准备跳出流读取
-	StreamHandle func(r *Result) (bool, *Result, error)
+	StreamHandle func(exchangeData ExchangeData) (ExchangeData, error)
 	// Data 要发送的数据
 	Data any
 }
 
 type CmdName string
 
-func (c CmdName) ExchangeWithOption(rw RWStreamInterface, option *ExchangeOption) (*Result, error) {
-	var isContinue bool
-	data := option.Data
-	rw.Write(append([]byte(c), '\n'))
-	rw.Flush()
+func emptyStreamHandler(exchangeData ExchangeData) (ExchangeData, error) {
+	return nil, transportstream.StreamIsEnd
+}
 
-	line, _, err := rw.ReadLine()
-	if err != nil {
-		return nil, fmt.Errorf("数据包读取失败: %s", err.Error())
+// SendCommand 发送一条命令到对端
+func (c CmdName) SendCommand(stream *transportstream.Stream) error {
+	if err := stream.WriteMsg([]byte(c), transportstream.MsgFlagSuccess); err != nil {
+		return err
 	}
 
-	r := &Result{}
-	if err = r.Parse(line); err != nil {
-		return nil, fmt.Errorf("数据包内容转换失败: %s", err.Error())
+	if _, err := stream.ReceiveMsg(); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ExchangeWithOption 交换数据到对端，数据为一来一回
+func (c CmdName) ExchangeWithOption(stream *transportstream.Stream, option *ExchangeOption) (ExchangeData, error) {
+	defer stream.WriteEndMsg()
+
+	if option.StreamHandle == nil {
+		option.StreamHandle = emptyStreamHandler
 	}
 
-	if r.Error {
-		return nil, fmt.Errorf("code: %s, msg: %s", r.Code, r.Msg)
+	if err := c.SendCommand(stream); err != nil {
+		return nil, err
 	}
 
-	SuccessResult(data).WriteTo(rw)
-	rw.Flush()
-
-	tempBuf := &bytes.Buffer{}
 	for {
-		l, isPrefix, err := rw.ReadLine()
-		if err != nil {
-			return nil, fmt.Errorf("指令响应包读取失败: %s", err.Error())
+		msg, err := stream.ReceiveMsg()
+		if err == transportstream.StreamIsEnd {
+			return msg, nil
 		}
 
-		if isPrefix {
-			tempBuf.Write(l)
+		if err != nil {
+			return msg, nil
+		}
+
+		nextData, err := option.StreamHandle(msg)
+		if err == transportstream.StreamIsEnd {
+			if err = stream.WriteEndMsgWithData(nextData); err != nil {
+				return nil, fmt.Errorf("接收结束消息失败: %s", err.Error())
+			}
 			continue
 		}
 
-		if tempBuf.Len() > 0 {
-			l = append(tempBuf.Bytes(), l...)
-			tempBuf.Reset()
-		}
-
-		r = &Result{}
-		if err = r.Parse(l); err != nil {
-			return nil, fmt.Errorf("解析指令响应包失败: %s", err.Error())
-		}
-
-		if option.StreamHandle != nil {
-			isContinue, r, err = option.StreamHandle(r)
-			if err != nil {
-				return nil, err
+		if err != nil {
+			switch e := err.(type) {
+			case *transportstream.ErrInfo:
+				if err = stream.WriteError(e); err != nil {
+					return nil, err
+				}
+			default:
+				_err := ErrCodeUnknown.New(err.Error())
+				_err.RawData = nextData
+				if err = stream.WriteError(_err); err != nil {
+					return nil, err
+				}
 			}
-
-			if isContinue {
-				continue
-			}
-			if r == nil {
-				r = SuccessResultEmpty()
-			}
+			continue
 		}
-
-		if r.Error {
-			return r, fmt.Errorf("%s", r.Msg)
+		if err = stream.WriteMsg(nextData, transportstream.MsgFlagSuccess); err != nil {
+			return nil, err
 		}
-
-		return r, nil
 	}
+
 }
 
-func (c CmdName) ExchangeWithData(data any, rw RWStreamInterface) (*Result, error) {
-	return c.ExchangeWithOption(rw, &ExchangeOption{
+func (c CmdName) ExchangeWithData(data any, stream *transportstream.Stream) (ExchangeData, error) {
+	return c.ExchangeWithOption(stream, &ExchangeOption{
 		Data: data,
 	})
 }
 
-func (c CmdName) Exchange(rw *bufio.ReadWriter) (*Result, error) {
-	return c.ExchangeWithData(nil, rw)
+func (c CmdName) Exchange(stream *transportstream.Stream) (ExchangeData, error) {
+	return c.ExchangeWithData(nil, stream)
 }
 
 func (c CmdName) Registry(handle CmdHandler) {
-	cmdMap[string(c)] = handle
+	cmdMap[c] = handle
 }
 
 var (
