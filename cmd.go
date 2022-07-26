@@ -147,6 +147,16 @@ func (c CmdName) ExchangeWithOption(stream *transportstream.Stream, option *Exch
 		return nil, err
 	}
 
+	if option.Data != nil {
+		if err := stream.WriteJsonMsg(option.Data); err != nil {
+			return nil, err
+		}
+	} else {
+		if err := stream.WriteMsg(nil, transportstream.MsgFlagSuccess); err != nil {
+			return nil, err
+		}
+	}
+
 	for {
 		msg, err := stream.ReceiveMsg()
 		if err == transportstream.StreamIsEnd {
