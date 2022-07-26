@@ -37,7 +37,7 @@ type CmdHandler func(stream *transportstream.Stream, conn net.Conn) (ExchangeDat
 
 var cmdMap = map[CmdName]CmdHandler{}
 
-func CmdRoute(stream *transportstream.Stream, conn net.Conn) {
+func CmdRoute(stream *transportstream.Stream, conn net.Conn) error {
 	sendEndOk := false
 	defer func() {
 		if sendEndOk {
@@ -62,18 +62,18 @@ func CmdRoute(stream *transportstream.Stream, conn net.Conn) {
 	cmdBytes, err := stream.ReceiveMsg()
 	if err != nil {
 		_ = stream.WriteError(ErrCodeReadCommand.New("读取命令码失败: " + err.Error()))
-		return
+		return err
 	}
 
 	cmdName := CmdName(cmdBytes)
 	cmdHandle, ok := cmdMap[cmdName]
 	if !ok {
 		_ = stream.WriteError(ErrCodeCommandUndefined.Newf("命令[%s]未被识别", cmdName))
-		return
+		return nil
 	}
 
 	if err = stream.WriteMsg(nil, transportstream.MsgFlagSuccess); err != nil {
-		return
+		return err
 	}
 
 	if nextData, err := cmdHandle(stream, conn); err != nil {
@@ -83,15 +83,16 @@ func CmdRoute(stream *transportstream.Stream, conn net.Conn) {
 		default:
 			_ = stream.WriteError(ErrCodeUnknown.New(err.Error()))
 		}
+		return nil
 	} else {
 		if err = stream.WriteEndMsgWithData(nextData); err != nil {
-			return
+			return nil
 		}
 		sendEndOk = true
 
 		for {
 			if _, err = stream.ReceiveMsg(); err == transportstream.StreamIsEnd {
-				return
+				return nil
 			}
 		}
 
