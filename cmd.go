@@ -33,6 +33,30 @@ func (e ExchangeData) UnmarshalProto(msg proto.Message) error {
 	return nil
 }
 
+func NewExchangeDataByStr(str string) ExchangeData {
+	return []byte(str)
+}
+
+func NewExchangeDataByJson(data any) (ExchangeData, error) {
+	marshal, err := json.Marshal(data)
+	return marshal, err
+}
+
+func NewExchangeDataByJsonMust(data any) ExchangeData {
+	marshal, _ := json.Marshal(data)
+	return marshal
+}
+
+func NewExchangeDataByProto(data proto.Message) (ExchangeData, error) {
+	marshal, err := proto.Marshal(data)
+	return marshal, err
+}
+
+func NewExchangeDataByProtoMust(data proto.Message) ExchangeData {
+	marshal, _ := proto.Marshal(data)
+	return marshal
+}
+
 type CmdHandler func(stream *transportstream.Stream, conn net.Conn) (ExchangeData, error)
 
 var cmdMap = map[CmdName]CmdHandler{}
