@@ -69,8 +69,11 @@ func SystemCallCommandRunOptionUnmarshal(s sshServer.Session) (*CommandRunOption
 
 // SystemCallOption 系统调用命令参数
 type SystemCallOption struct {
-	// Rand随机数
+	// Name 请求的服务名称
+	Name string
+	// Rand 随机数
 	Rand string
+	// Addr 服务器返回地址
 	Addr string
 }
 
