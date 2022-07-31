@@ -249,4 +249,8 @@ var (
 	CmdSystemShellCurrentSetting CmdName = "/system/shell/current/setting"
 	// CmdSystemDirPath 系统内目录路径验证
 	CmdSystemDirPath CmdName = "/system/dir/path/verify"
+	// CmdPluginInstall 插件安装
+	CmdPluginInstall CmdName = "/plugin/install"
+	// CmdPluginList 插件列表
+	CmdPluginList CmdName = "/plugin/list"
 )
