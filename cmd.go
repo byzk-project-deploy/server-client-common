@@ -191,8 +191,7 @@ func (c CmdName) ExchangeWithOption(stream *transportstream.Stream, option *Exch
 
 		if err != nil {
 			for {
-				_, err = stream.ReceiveMsg()
-				if err == transportstream.StreamIsEnd || err == io.EOF {
+				if _, e := stream.ReceiveMsg(); e == transportstream.StreamIsEnd || e == io.EOF {
 					break
 				}
 			}
