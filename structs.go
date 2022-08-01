@@ -91,7 +91,7 @@ type SystemCmdOptions struct {
 
 // DbPluginInfo 插件信息
 type DbPluginInfo struct {
-	// Id 主键
+	// Id 主键, 使用sha512
 	Id string `json:"id,omitempty" gorm:"primary_key"`
 	// Author 作者名称
 	Author string
@@ -109,8 +109,4 @@ type DbPluginInfo struct {
 	Type rpcinterfaces.PluginType
 	// Path 路径
 	Path string `json:"-"`
-	// Md5 md5值 Hex格式
-	Md5 string `json:"md5,omitempty"`
-	// Sha1 sha1值 Hex格式
-	Sha1 string `json:"sha1,omitempty"`
 }
