@@ -65,7 +65,7 @@ var cmdMap = map[CmdName]CmdHandler{}
 func CmdRoute(stream *transportstream.Stream, conn net.Conn) error {
 	sendEndOk := false
 	defer func() {
-		if !sendEndOk {
+		if sendEndOk {
 			return
 		}
 		_ = stream.WriteEndMsg()
