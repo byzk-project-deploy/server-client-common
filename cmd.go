@@ -5,6 +5,7 @@ import (
 	"fmt"
 	transportstream "github.com/go-base-lib/transport-stream"
 	"github.com/gogo/protobuf/proto"
+	"io"
 	"net"
 )
 
@@ -189,6 +190,12 @@ func (c CmdName) ExchangeWithOption(stream *transportstream.Stream, option *Exch
 		}
 
 		if err != nil {
+			for {
+				_, err = stream.ReceiveMsg()
+				if err == transportstream.StreamIsEnd || err == io.EOF {
+					break
+				}
+			}
 			return msg, err
 		}
 
