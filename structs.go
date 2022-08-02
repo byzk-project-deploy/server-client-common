@@ -109,6 +109,8 @@ type DbPluginInfo struct {
 	Type rpcinterfaces.PluginType
 	// Path 路径
 	Path string `json:"-"`
+	// InstallTime 安装时间
+	InstallTime time.Time
 }
 
 // PluginStatus 插件状态

@@ -264,4 +264,8 @@ var (
 	CmdPluginInstall CmdName = "/plugin/install"
 	// CmdPluginList 插件列表
 	CmdPluginList CmdName = "/plugin/list"
+	// CmdPluginInfo 插件详细信息
+	CmdPluginInfo CmdName = "/plugin/info"
+	// CmdPluginUninstall 插件卸载
+	CmdPluginUninstall CmdName = "/plugin/uninstall"
 )
