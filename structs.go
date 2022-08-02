@@ -111,6 +111,8 @@ type DbPluginInfo struct {
 	Path string `json:"-"`
 	// InstallTime 安装时间
 	InstallTime time.Time
+	// Enable 是否启用
+	Enable bool
 }
 
 // PluginStatus 插件状态
