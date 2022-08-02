@@ -268,4 +268,6 @@ var (
 	CmdPluginInfo CmdName = "/plugin/info"
 	// CmdPluginUninstall 插件卸载
 	CmdPluginUninstall CmdName = "/plugin/uninstall"
+	// CmdPluginInfoPromptList 插件info提示信息
+	CmdPluginInfoPromptList CmdName = "/plugin/info/prompt"
 )
