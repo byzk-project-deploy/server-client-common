@@ -117,12 +117,12 @@ type PluginStatus uint8
 const (
 	// PluginStatusNoRunning 没有启动
 	PluginStatusNoRunning PluginStatus = iota
+	// PluginStatusOk 启动成功
+	PluginStatusOk
 	// PluginStatusRebooting 重启中
 	PluginStatusRebooting
 	// PluginStatusErr 启动失败
 	PluginStatusErr
-	// PluginStatusOk 启动成功
-	PluginStatusOk
 )
 
 // PluginStatusInfo 插件状态信息
