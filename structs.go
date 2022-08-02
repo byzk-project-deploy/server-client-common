@@ -110,3 +110,31 @@ type DbPluginInfo struct {
 	// Path 路径
 	Path string `json:"-"`
 }
+
+// PluginStatus 插件状态
+type PluginStatus uint8
+
+const (
+	// PluginStatusNoRunning 没有启动
+	PluginStatusNoRunning PluginStatus = iota
+	// PluginStatusRebooting 重启中
+	PluginStatusRebooting
+	// PluginStatusErr 启动失败
+	PluginStatusErr
+	// PluginStatusOk 启动成功
+	PluginStatusOk
+)
+
+// PluginStatusInfo 插件状态信息
+type PluginStatusInfo struct {
+	// DbPluginInfo 插件信息
+	*DbPluginInfo
+	// Status 状态
+	Status PluginStatus
+	// Msg 消息
+	Msg string
+	// StartTime 启动时间
+	StartTime time.Time
+	// StopTime 停止时间
+	StopTime time.Time
+}
