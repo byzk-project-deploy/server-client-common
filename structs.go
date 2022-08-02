@@ -104,13 +104,13 @@ type DbPluginInfo struct {
 	// Icon 图标
 	Icon string `json:"icon,omitempty"`
 	// CreateTime 创建时间
-	CreateTime *time.Time
+	CreateTime time.Time
 	// Type 插件类别
 	Type rpcinterfaces.PluginType
 	// Path 路径
 	Path string `json:"-"`
 	// InstallTime 安装时间
-	InstallTime *time.Time
+	InstallTime time.Time
 }
 
 // PluginStatus 插件状态
@@ -136,7 +136,7 @@ type PluginStatusInfo struct {
 	// Msg 消息
 	Msg string
 	// StartTime 启动时间
-	StartTime *time.Time
+	StartTime time.Time
 	// StopTime 停止时间
-	StopTime *time.Time
+	StopTime time.Time
 }
