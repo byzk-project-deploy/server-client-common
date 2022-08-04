@@ -40,7 +40,7 @@ func (s *CommandRunOption) SystemCallOptionMarshal(session *ssh.Session) error {
 
 const systemCallOptionEnvKey = "SYSTEM_COMMAND_CALL_OPTION"
 
-// SystemCallOptionName 系统调用选项反序列化
+// SystemCallCommandRunOptionUnmarshal 系统调用选项反序列化
 func SystemCallCommandRunOptionUnmarshal(s sshServer.Session) (*CommandRunOption, error) {
 
 	sessionEnv := s.Environ()
@@ -141,4 +141,14 @@ type PluginStatusInfo struct {
 	StartTime time.Time
 	// StopTime 停止时间
 	StopTime time.Time
+}
+
+// KeypairGeneratorInfo 密钥对生成信息
+type KeypairGeneratorInfo struct {
+	// Type 要生成的类型: plugin、client
+	Type string
+	// Author 作者名称，当 Type 为plugin时生效
+	Author string
+	// Name 插件名称, 当前 Type 为plugin时生效
+	Name string
 }

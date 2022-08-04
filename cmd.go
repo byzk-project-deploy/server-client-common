@@ -274,4 +274,6 @@ var (
 	CmdPluginEnable CmdName = "/plugin/enable"
 	// CmdPluginDisable 禁用插件
 	CmdPluginDisable CmdName = "/plugin/disable"
+	// CmdKeyPair 密钥工具
+	CmdKeyPair CmdName = "/inside/keypair"
 )
