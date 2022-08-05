@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net"
 	"strings"
 	"time"
 
@@ -151,4 +152,20 @@ type KeypairGeneratorInfo struct {
 	Author string
 	// Name 插件名称, 当前 Type 为plugin时生效
 	Name string
+}
+
+// ServerInfo 服务器信息
+type ServerInfo struct {
+	// Id id
+	Id string
+	// IP ip地址
+	IP net.IP
+	// Port 端口
+	Port int
+	// Alias 别名
+	Alias []string
+	// CertPem 证书PEM
+	CertPem string
+	// CertPrivateKeyPem 私钥PEM
+	CertPrivateKeyPem string
 }

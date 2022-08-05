@@ -276,4 +276,14 @@ var (
 	CmdPluginDisable CmdName = "/plugin/disable"
 	// CmdKeyPair 密钥工具
 	CmdKeyPair CmdName = "/inside/keypair"
+	// CmdKeyPairRemoteClient 远程客户端密钥获取
+	CmdKeyPairRemoteClient CmdName = "/inside/keypair/remote/client"
+	// CmdRemoteServerList 远程服务列表
+	CmdRemoteServerList CmdName = "/inside/remote/server/list"
+	// CmdRemoteServerAdd 远程服务添加
+	CmdRemoteServerAdd CmdName = "/inside/remote/server/add"
+	// CmdRemoteServerDel 远程服务删除
+	CmdRemoteServerDel CmdName = "/inside/remote/server/del"
+	// CmdRemoteServerUpdate 远程服务器信息更新
+	CmdRemoteServerUpdate CmdName = "/inside/remote/server/update"
 )
