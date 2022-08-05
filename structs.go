@@ -168,4 +168,6 @@ type ServerInfo struct {
 	CertPem string
 	// CertPrivateKeyPem 私钥PEM
 	CertPrivateKeyPem string
+	// JoinTime 加入时间
+	JoinTime time.Time
 }
