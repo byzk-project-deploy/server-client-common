@@ -164,10 +164,16 @@ type ServerInfo struct {
 	Port int
 	// Alias 别名
 	Alias []string
-	// CertPem 证书PEM
-	CertPem string
-	// CertPrivateKeyPem 私钥PEM
-	CertPrivateKeyPem string
+	// ClientCertPem 证书PEM
+	ClientCertPem string
+	// ClientPrivatePem 私钥PEM
+	ClientPrivatePem string
+	// SSHUser ssh用户名( 系统本地 )
+	SSHUser string
+	// SSHPassword ssh密码( 系统本地 )
+	SSHPassword string
+	// SSHPort ssh端口( 本地 )
+	SSHPort int
 	// JoinTime 加入时间
 	JoinTime time.Time
 }
