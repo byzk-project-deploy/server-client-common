@@ -172,6 +172,10 @@ type ServerInfo struct {
 	SSHUser string
 	// SSHPassword ssh密码( 系统本地 )
 	SSHPassword string
+	// SSHRootPassword ssh root用户密码
+	SSHRootPassword string
+	// SSHSupportSudo 是否支持sudo
+	SSHSupportSudo string
 	// SSHPort ssh端口( 本地 )
 	SSHPort int
 	// JoinTime 加入时间
