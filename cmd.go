@@ -211,7 +211,7 @@ func (c CmdName) ExchangeWithOption(stream *transportstream.Stream, option *Exch
 			if err = stream.WriteEndMsgWithData(nextData); err != nil {
 				return nil, fmt.Errorf("接收结束消息失败: %s", err.Error())
 			}
-			continue
+			return nil, nil
 		}
 
 		if err != nil {
