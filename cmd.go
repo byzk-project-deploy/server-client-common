@@ -202,7 +202,7 @@ func (c CmdName) ExchangeWithOption(stream *transportstream.Stream, option *Exch
 		}
 
 		if err != nil {
-			if option.StreamErrHandle != nil {
+			if err != transportstream.StreamIsEnd && option.StreamErrHandle != nil {
 				breakStream, e := option.StreamErrHandle(msg, err)
 				if e != nil {
 					_ = stream.WriteError(e)
