@@ -147,6 +147,10 @@ type WriteStreamInterface interface {
 type ExchangeOption struct {
 	// StreamHandle 流拦截器
 	StreamHandle func(exchangeData ExchangeData, stream *transportstream.Stream) (ExchangeData, error)
+	// StreamErrHandle 处理除了 transportstream.StreamIsEnd 与 io.EOF 之外的所有异常
+	// breakStream 表示是否中断流, 如果返回true则向对断发送 transportstream.StreamIsEnd 指令并跳出流监听
+	// targetErr 将把转换之后的异常信息发送至服务器端
+	StreamErrHandle func(exchangeData ExchangeData, err error) (breakStream bool, targetErr *transportstream.ErrInfo)
 	// Data 要发送的数据
 	Data any
 }
@@ -198,6 +202,17 @@ func (c CmdName) ExchangeWithOption(stream *transportstream.Stream, option *Exch
 		}
 
 		if err != nil {
+			if option.StreamErrHandle != nil {
+				breakStream, e := option.StreamErrHandle(msg, err)
+				if e != nil {
+					_ = stream.WriteError(e)
+				}
+
+				if breakStream {
+					return msg, e
+				}
+				continue
+			}
 			for {
 				if _, e := stream.ReceiveMsg(); e == transportstream.StreamIsEnd || e == io.EOF {
 					break
