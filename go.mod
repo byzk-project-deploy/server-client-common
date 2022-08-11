@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/byzk-project-deploy/base-interface v0.0.0-20220730184505-463916a55621
-	github.com/go-base-lib/transport-stream v0.0.0-20220726090446-571c4f243d92
+	github.com/go-base-lib/transport-stream v0.0.0-20220811074245-adc8b6de872e
 	github.com/gogo/protobuf v1.3.2
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d
 )
