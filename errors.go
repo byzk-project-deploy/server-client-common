@@ -1,6 +1,9 @@
 package serverclientcommon
 
-import transportstream "github.com/go-base-lib/transport-stream"
+import (
+	"fmt"
+	transportstream "github.com/go-base-lib/transport-stream"
+)
 
 const (
 	// ErrCodeUnknown 未知的异常
@@ -18,6 +21,23 @@ const (
 	// ErrSystemPath 系统路径相关错误
 	ErrSystemPath
 )
+
+func ErrorByErr(err error) *transportstream.ErrInfo {
+	targetErr, ok := transportstream.ErrConvert(err)
+	if ok {
+		return targetErr
+	}
+
+	return ErrCodeUnknown.New(err.Error())
+}
+
+func Error(msg string) *transportstream.ErrInfo {
+	return ErrCodeUnknown.New(msg)
+}
+
+func Errorf(msg string, data ...any) *transportstream.ErrInfo {
+	return Error(fmt.Sprintf(msg, data...))
+}
 
 //type ErrCode string
 //
