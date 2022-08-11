@@ -70,7 +70,7 @@ func CmdRoute(stream *transportstream.Stream, conn net.Conn) error {
 		}
 		_ = stream.WriteEndMsg()
 		for {
-			if _, err := stream.ReceiveMsg(); err == transportstream.StreamIsEnd {
+			if _, err := stream.ReceiveMsg(); err == transportstream.StreamIsEnd || err == io.EOF {
 				return
 			}
 		}
