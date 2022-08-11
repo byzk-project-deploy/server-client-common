@@ -142,15 +142,15 @@ type WriteStreamInterface interface {
 }
 
 type ExchangeOption struct {
-	// StreamHandle 流拦截器, 返回bool来确定是否准备跳出流读取
-	StreamHandle func(exchangeData ExchangeData) (ExchangeData, error)
+	// StreamHandle 流拦截器
+	StreamHandle func(exchangeData ExchangeData, stream *transportstream.Stream) (ExchangeData, error)
 	// Data 要发送的数据
 	Data any
 }
 
 type CmdName string
 
-func emptyStreamHandler(exchangeData ExchangeData) (ExchangeData, error) {
+func emptyStreamHandler(exchangeData ExchangeData, stream *transportstream.Stream) (ExchangeData, error) {
 	return nil, transportstream.StreamIsEnd
 }
 
@@ -203,7 +203,7 @@ func (c CmdName) ExchangeWithOption(stream *transportstream.Stream, option *Exch
 			return msg, err
 		}
 
-		nextData, err := option.StreamHandle(msg)
+		nextData, err := option.StreamHandle(msg, stream)
 		if err == transportstream.StreamIsEnd {
 			if err = stream.WriteEndMsgWithData(nextData); err != nil {
 				return nil, fmt.Errorf("接收结束消息失败: %s", err.Error())
@@ -226,8 +226,10 @@ func (c CmdName) ExchangeWithOption(stream *transportstream.Stream, option *Exch
 			}
 			continue
 		}
-		if err = stream.WriteMsg(nextData, transportstream.MsgFlagSuccess); err != nil {
-			return nil, err
+		if nextData != nil {
+			if err = stream.WriteMsg(nextData, transportstream.MsgFlagSuccess); err != nil {
+				return nil, err
+			}
 		}
 	}
 
