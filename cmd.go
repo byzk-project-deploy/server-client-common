@@ -108,8 +108,6 @@ func CmdRoute(stream *transportstream.Stream, conn net.Conn) error {
 
 	if nextData, err := cmdHandle(stream, conn); err != nil {
 		if err == transportstream.StreamIsEnd {
-			_ = stream.WriteEndMsg()
-			sendEndOk = true
 			return nil
 		}
 		switch e := err.(type) {
