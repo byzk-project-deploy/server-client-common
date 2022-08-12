@@ -306,4 +306,6 @@ var (
 	CmdRemoteServerDel CmdName = "/inside/remote/server/del"
 	// CmdRemoteServerUpdate 远程服务器信息更新
 	CmdRemoteServerUpdate CmdName = "/inside/remote/server/update"
+	// CmdRemoteServerInfo 远程服务器信息查询
+	CmdRemoteServerInfo CmdName = "/inside/remote/server/info"
 )
