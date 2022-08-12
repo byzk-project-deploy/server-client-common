@@ -161,6 +161,8 @@ const (
 	ServerStatusNoCheck ServerStatus = iota
 	// ServerStatusCheckErr 服务器检测失败
 	ServerStatusCheckErr
+	// ServerStatusUserErr 用户名或密码验证失败
+	ServerStatusUserErr
 	// ServerStatusNeedInstall 需要安装
 	ServerStatusNeedInstall
 	// ServerStatusNetworkErr 网络异常
