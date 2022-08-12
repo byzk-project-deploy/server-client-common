@@ -308,4 +308,6 @@ var (
 	CmdRemoteServerUpdate CmdName = "/inside/remote/server/update"
 	// CmdRemoteServerInfo 远程服务器信息查询
 	CmdRemoteServerInfo CmdName = "/inside/remote/server/info"
+	// CmdRemoteServerUpdateAlias 远程服务别名更新
+	CmdRemoteServerUpdateAlias CmdName = "/inside/remote/server/alias"
 )
