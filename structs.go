@@ -154,6 +154,19 @@ type KeypairGeneratorInfo struct {
 	Name string
 }
 
+type ServerStatus uint16
+
+const (
+	// ServerStatusNeedInstall 需要安装
+	ServerStatusNeedInstall ServerStatus = iota
+	// ServerStatusNetworkErr 网络异常
+	ServerStatusNetworkErr
+	// ServerStatusNoRun 未启动
+	ServerStatusNoRun
+	// ServerRunning 正在运行中
+	ServerRunning
+)
+
 // ServerInfo 服务器信息
 type ServerInfo struct {
 	// Id id
@@ -177,7 +190,11 @@ type ServerInfo struct {
 	// SSHSupportSudo 是否支持sudo
 	SSHSupportSudo string
 	// SSHPort ssh端口( 本地 )
-	SSHPort int
+	SSHPort uint16
+	// Status 服务器现在状态
+	Status ServerStatus
+	// EndMsg 最后一次消息
+	EndMsg string
 	// JoinTime 加入时间
 	JoinTime time.Time
 }
