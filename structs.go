@@ -157,8 +157,12 @@ type KeypairGeneratorInfo struct {
 type ServerStatus uint16
 
 const (
+	// ServerStatusNoCheck 未检测
+	ServerStatusNoCheck ServerStatus = iota
+	// ServerStatusCheckErr 服务器检测失败
+	ServerStatusCheckErr
 	// ServerStatusNeedInstall 需要安装
-	ServerStatusNeedInstall ServerStatus = iota
+	ServerStatusNeedInstall
 	// ServerStatusNetworkErr 网络异常
 	ServerStatusNetworkErr
 	// ServerStatusNoRun 未启动
