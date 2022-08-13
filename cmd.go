@@ -310,4 +310,10 @@ var (
 	CmdRemoteServerInfo CmdName = "/inside/remote/server/info"
 	// CmdRemoteServerUpdateAlias 远程服务别名更新
 	CmdRemoteServerUpdateAlias CmdName = "/inside/remote/server/alias"
+	// CmdRemoteServerRepair 远程服务自动修复
+	CmdRemoteServerRepair CmdName = "/inside/remote/server/repair"
+	// CmdRemoteServerFileUpload 远程服务文件上传
+	CmdRemoteServerFileUpload CmdName = "/inside/remote/server/file/upload"
+	// CmdRemoteServerFileDownload 远程服务文件下载
+	CmdRemoteServerFileDownload CmdName = "/inside/remote/server/file/download"
 )
