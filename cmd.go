@@ -7,6 +7,7 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"io"
 	"net"
+	"strings"
 )
 
 type ExchangeData []byte
@@ -70,7 +71,7 @@ func CmdRoute(stream *transportstream.Stream, conn net.Conn) error {
 		}
 		_ = stream.WriteEndMsg()
 		for {
-			if _, err := stream.ReceiveMsg(); err == transportstream.StreamIsEnd || err == io.EOF {
+			if _, err := stream.ReceiveMsg(); err == transportstream.StreamIsEnd || err == io.EOF || strings.HasSuffix(err.Error(), "connection reset by peer") {
 				return
 			}
 		}
@@ -214,7 +215,7 @@ func (c CmdName) ExchangeWithOption(stream *transportstream.Stream, option *Exch
 				continue
 			}
 			for {
-				if _, e := stream.ReceiveMsg(); e == transportstream.StreamIsEnd || e == io.EOF {
+				if _, e := stream.ReceiveMsg(); e == transportstream.StreamIsEnd || e == io.EOF || strings.HasSuffix(err.Error(), "connection reset by peer") {
 					break
 				}
 			}
