@@ -204,3 +204,13 @@ type ServerInfo struct {
 	// JoinTime 加入时间
 	JoinTime time.Time
 }
+
+// RemoteServerRepairResInfo 远程服务修复结果信息
+type RemoteServerRepairResInfo struct {
+	// Ip 服务器IP
+	Ip string
+	// Success 是否成功
+	Success bool
+	// ErrMsg 错误消息
+	ErrMsg string
+}
