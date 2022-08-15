@@ -71,7 +71,7 @@ func CmdRoute(stream *transportstream.Stream, conn net.Conn) error {
 		}
 		_ = stream.WriteEndMsg()
 		for {
-			if _, err := stream.ReceiveMsg(); err == transportstream.StreamIsEnd || err == io.EOF || strings.HasSuffix(err.Error(), "connection reset by peer") {
+			if _, err := stream.ReceiveMsg(); err == transportstream.StreamIsEnd || err == io.EOF || strings.Contains(err.Error(), "connection reset by peer") {
 				return
 			}
 		}
@@ -215,7 +215,7 @@ func (c CmdName) ExchangeWithOption(stream *transportstream.Stream, option *Exch
 				continue
 			}
 			for {
-				if _, e := stream.ReceiveMsg(); e == transportstream.StreamIsEnd || e == io.EOF || strings.HasSuffix(err.Error(), "connection reset by peer") {
+				if _, e := stream.ReceiveMsg(); e == transportstream.StreamIsEnd || e == io.EOF || strings.Contains(err.Error(), "connection reset by peer") {
 					break
 				}
 			}
