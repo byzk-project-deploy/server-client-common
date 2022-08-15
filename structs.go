@@ -227,7 +227,10 @@ type UploadAddrInfo struct {
 type UploadType uint8
 
 const (
+	// UploadTypeSSHFtp ssh + ftp 的文件上传类型
 	UploadTypeSSHFtp UploadType = iota
+	// UploadUnknown 未知的上传类型
+	UploadUnknown
 )
 
 // RemoteServerUploadRequest 文件上传请求数据
