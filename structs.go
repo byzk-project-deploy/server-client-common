@@ -214,3 +214,23 @@ type RemoteServerRepairResInfo struct {
 	// ErrMsg 错误消息
 	ErrMsg string
 }
+
+// UploadAddrInfo 上传地址信息
+type UploadAddrInfo struct {
+	// Server 服务器信息
+	Server string
+	// Path 路径信息
+	Path string
+}
+
+// RemoteServerUploadRequest 文件上传请求数据
+type RemoteServerUploadRequest struct {
+	// Include 包含的服务器
+	Include []string
+	// Exclude 排除的服务器
+	Exclude []string
+	// SourceAddr 上传的原始文件地址信息
+	SourceAddr *UploadAddrInfo
+	// TargetAddrList 目标地址列表
+	TargetAddrList []*UploadAddrInfo
+}
