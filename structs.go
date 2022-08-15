@@ -248,3 +248,14 @@ type RemoteServerUploadRequest struct {
 	// UploadType 上传类型
 	UploadType UploadType
 }
+
+type RemoteServerUploadResponse struct {
+	// CurrentFileIndex 当前上传文件的索引
+	CurrentFileIndex int
+	// CurrentServerIndex 当前文件的索引
+	CurrentServerIndex int
+	// Progress 进度, 100为完成
+	Progress int
+	// PrevProgress 上一次的进度
+	PrevProgress int
+}
