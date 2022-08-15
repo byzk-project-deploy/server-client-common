@@ -235,6 +235,8 @@ const (
 
 // RemoteServerUploadRequest 文件上传请求数据
 type RemoteServerUploadRequest struct {
+	// Recursive 是否允许递归上传
+	Recursive bool
 	// Include 包含的服务器
 	Include []string
 	// Exclude 排除的服务器
