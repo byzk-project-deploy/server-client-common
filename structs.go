@@ -223,6 +223,13 @@ type UploadAddrInfo struct {
 	Path string
 }
 
+// UploadType 上传类型
+type UploadType uint8
+
+const (
+	UploadTypeSSHFtp UploadType = iota
+)
+
 // RemoteServerUploadRequest 文件上传请求数据
 type RemoteServerUploadRequest struct {
 	// Include 包含的服务器
@@ -233,4 +240,6 @@ type RemoteServerUploadRequest struct {
 	SourceAddr *UploadAddrInfo
 	// TargetAddrList 目标地址列表
 	TargetAddrList []*UploadAddrInfo
+	// UploadType 上传类型
+	UploadType UploadType
 }
