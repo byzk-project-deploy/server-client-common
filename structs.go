@@ -258,4 +258,10 @@ type RemoteServerUploadResponse struct {
 	Progress int
 	// PrevProgress 上一次的进度
 	PrevProgress int
+	// ErrMsg 错误消息
+	ErrMsg string
+	// ServerIp 服务器IP
+	ServerIp string
+	// Success 是否成功
+	Success bool
 }
