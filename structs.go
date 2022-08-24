@@ -109,7 +109,7 @@ type DbPluginInfo struct {
 	// Type 插件类别
 	Type rpcinterfaces.PluginType
 	// Path 路径
-	Path string `json:"-"`
+	//Path string `json:"-"`
 	// InstallTime 安装时间
 	InstallTime time.Time
 	// Enable 是否启用
