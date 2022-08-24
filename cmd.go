@@ -295,6 +295,8 @@ var (
 	CmdPluginUninstall CmdName = "/plugin/uninstall"
 	// CmdPluginInfoPromptList 插件info提示信息
 	CmdPluginInfoPromptList CmdName = "/plugin/info/prompt"
+	// CmdPluginListener 插件监听
+	CmdPluginListener CmdName = "/plugin/listener"
 	// CmdKeyPair 密钥工具
 	CmdKeyPair CmdName = "/inside/keypair"
 	// CmdKeyPairRemoteClient 远程客户端密钥获取
