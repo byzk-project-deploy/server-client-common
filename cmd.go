@@ -283,6 +283,10 @@ var (
 	CmdSystemDirPath CmdName = "/system/dir/path/verify"
 	// CmdPluginInstall 插件安装
 	CmdPluginInstall CmdName = "/plugin/install"
+	// CmdPluginEnabled 启用插件
+	CmdPluginEnabled CmdName = "/plugin/enabled"
+	// CmdPluginDisabled 禁用插件
+	CmdPluginDisabled CmdName = "/plugin/disabled"
 	// CmdPluginList 插件列表
 	CmdPluginList CmdName = "/plugin/list"
 	// CmdPluginInfo 插件详细信息

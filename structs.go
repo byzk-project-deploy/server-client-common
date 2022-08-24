@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/hashicorp/go-hclog"
 	"io"
 	"net"
 	"strings"
@@ -131,7 +132,7 @@ const (
 )
 
 // PluginStatusInfo 插件状态信息
-type PluginStatusInfo struct {
+type PluginStatusInfo[L hclog.Logger] struct {
 	// DbPluginInfo 插件信息
 	*DbPluginInfo
 	// Status 状态
