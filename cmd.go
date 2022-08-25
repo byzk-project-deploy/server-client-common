@@ -297,6 +297,8 @@ var (
 	CmdPluginInfoPromptList CmdName = "/plugin/info/prompt"
 	// CmdPluginListener 插件监听
 	CmdPluginListener CmdName = "/plugin/listener"
+	// CmdPluginLogWrite 插件日志回写
+	CmdPluginLogWrite CmdName = "/plugin/log/Write"
 	// CmdKeyPair 密钥工具
 	CmdKeyPair CmdName = "/inside/keypair"
 	// CmdKeyPairRemoteClient 远程客户端密钥获取
