@@ -321,4 +321,6 @@ var (
 	CmdRemoteServerFileUpload CmdName = "/inside/remote/server/file/upload"
 	// CmdRemoteServerFileDownload 远程服务文件下载
 	CmdRemoteServerFileDownload CmdName = "/inside/remote/server/file/download"
+	// CmdConfigListener 配置监听
+	CmdConfigListener CmdName = "/config/listener"
 )
